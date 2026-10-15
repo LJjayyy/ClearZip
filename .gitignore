@@ -1,0 +1,31 @@
+# Build products and local caches
+/build/
+/dist/
+/.build/
+/DerivedData/
+*.xcarchive
+__pycache__/
+*.py[cod]
+
+# macOS and editor state
+.DS_Store
+._*
+*.xcuserstate
+xcuserdata/
+.idea/
+.vscode/
+
+# Local configuration and signing credentials
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+*.mobileprovision
+*.provisionprofile
+
+# Internal development notes and evidence (kept locally)
+/docs/design.md
+/docs/validation.md
+/docs/evidence/
+/.local/

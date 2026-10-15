@@ -1,0 +1,42 @@
+name: macOS build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build application and Finder extension
+        run: bash Scripts/build.sh
+
+      - name: Run archive regression tests
+        run: bash Scripts/test.sh
+
+      - name: Package DMG
+        run: bash Scripts/package-dmg.sh
+
+      - name: Upload development build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ClearZip-${{ runner.os }}-${{ runner.arch }}
+          path: build/ClearZip-*.dmg
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
